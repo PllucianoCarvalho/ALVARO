@@ -198,6 +198,44 @@ function closeModal() {
     }, 500);
 }
 
+function initializeCarousel() {
+    const slides = Array.from(document.querySelectorAll('.carousel-slide'));
+    const prevButton = document.querySelector('.carousel-button.prev');
+    const nextButton = document.querySelector('.carousel-button.next');
+    let currentIndex = 0;
+
+    function updateCarousel(index) {
+        if (index < 0 || index >= slides.length) {
+            return;
+        }
+
+        slides.forEach((slide, slideIndex) => {
+            slide.classList.remove('active', 'left', 'right');
+            if (slideIndex === index) {
+                slide.classList.add('active');
+            } else if (slideIndex < index) {
+                slide.classList.add('left');
+            } else {
+                slide.classList.add('right');
+            }
+        });
+
+        currentIndex = index;
+        prevButton.disabled = currentIndex === 0;
+        nextButton.disabled = currentIndex === slides.length - 1;
+    }
+
+    prevButton.addEventListener('click', () => {
+        updateCarousel(currentIndex - 1);
+    });
+
+    nextButton.addEventListener('click', () => {
+        updateCarousel(currentIndex + 1);
+    });
+
+    updateCarousel(0);
+}
+
 // Adicionar animação de saída
 const style = document.createElement('style');
 style.textContent = `
@@ -214,7 +252,5 @@ document.head.appendChild(style);
 
 window.addEventListener('DOMContentLoaded', function() {
     initializeQuiz();
+    initializeCarousel();
 });
-
-    animate();
-}
